@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YLO — Rede Social (Local)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo">YLO</div>
+      <div class="brand-name">YLO</div>
+    </div>
+
+    <nav class="nav-actions">
+      <button id="nav-feed" class="nav-btn active">Feed</button>
+      <button id="nav-profile" class="nav-btn">Meu Perfil</button>
+      <button id="nav-login" class="nav-btn">Entrar / Registar</button>
+      <button id="nav-logout" class="nav-btn hidden">Sair</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- FEED -->
+    <section id="feed-section" class="feed-section">
+      <div id="compose" class="card post-box hidden">
+        <div class="compose-header">
+          <div id="compose-avatar" class="avatar-small">U</div>
+          <div id="compose-username" class="compose-user">Você</div>
+        </div>
+
+        <textarea id="postText" class="compose-textarea" placeholder="O que você está a pensar?"></textarea>
+
+        <div class="compose-controls">
+          <input id="postImage" type="file" accept="image/*" />
+          <button id="publishBtn" class="btn">Publicar</button>
+        </div>
+      </div>
+
+      <h2 class="section-title">Posts Recentes</h2>
+      <div id="posts" class="posts"></div>
+    </section>
+
+    <!-- RIGHT PANEL -->
+    <aside id="right-panel" class="right-panel">
+      <div id="session-info" class="card session-card">
+        <div id="session-avatar" class="avatar-large">U</div>
+        <div id="session-username" class="session-username">Visitante</div>
+        <div id="session-bio" class="session-bio">Entrar para postar.</div>
+      </div>
+
+      <div class="card small-card">
+        <h3>Usuários</h3>
+        <div id="users-list" class="users-list"></div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- MODAL AUTENTICAÇÃO -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h3 id="modal-title">Entrar</h3>
+
+      <div id="auth-forms">
+        <!-- LOGIN -->
+        <div id="login-form" class="auth-form">
+          <input id="login-email" placeholder="Email" />
+          <input id="login-password" type="password" placeholder="Senha" />
+          <button id="btn-login" class="btn">Entrar</button>
+        </div>
+
+        <!-- REGISTER -->
+        <div id="register-form" class="auth-form hidden">
+          <input id="reg-email" placeholder="Email" />
+          <input id="reg-username" placeholder="Nome de usuário" />
+          <input id="reg-password" type="password" placeholder="Senha" />
+          <input id="reg-avatar" type="file" accept="image/*" />
+          <button id="btn-register" class="btn">Registar</button>
+        </div>
+      </div>
+
+      <div class="modal-switch">
+        <span id="switch-to-register" class="link">Criar conta</span>
+        ·
+        <span id="switch-to-login" class="link hidden">Já tenho conta</span>
+      </div>
+
+      <button id="modal-close" class="btn secondary">Fechar</button>
+    </div>
+  </div>
+
+  <!-- PROFILE PAGE -->
+  <div id="profile-page" class="page hidden">
+    <div class="card">
+      <h2>Meu Perfil</h2>
+      <div class="profile-edit">
+        <div id="profile-avatar" class="avatar-large">U</div>
+        <input id="profile-username" placeholder="Nome de usuário" />
+        <input id="profile-bio" placeholder="Bio" />
+        <input id="profile-avatar-input" type="file" accept="image/*" />
+        <button id="save-profile" class="btn">Salvar Perfil</button>
+      </div>
+      <h3>Minhas Estatísticas</h3>
+      <div id="profile-stats"></div>
+      <h3>Meus Posts</h3>
+      <div id="my-posts"></div>
+      <button id="close-profile" class="btn secondary">Fechar Perfil</button>
+    </div>
+  </div>
+
+<script src="app.js"></script>
+</body>
+  </html>
