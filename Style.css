@@ -1,0 +1,155 @@
+/* Reset / base */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: "Inter", sans-serif; }
+body { background: linear-gradient(180deg,#f6fbff 0%, #ffffff 100%); color:#0f172a; min-height:100vh; }
+
+/* NAV */
+.navbar { display:flex; justify-content:space-between; align-items:center; padding:12px 18px; background:#0d47a1; color:#fff; }
+.brand { display:flex; align-items:center; gap:10px; }
+.logo { width:44px; height:44px; background:#1565c0; display:flex; align-items:center; justify-content:center; border-radius:8px; font-weight:700; color:#fff; font-size:18px; }
+.brand-name { font-weight:700; font-size:18px; color:white; }
+.nav-actions { display:flex; gap:8px; align-items:center; }
+.nav-btn { background:transparent; color:#dbe7ff; border:none; padding:8px 10px; border-radius:6px; cursor:pointer; font-weight:600; }
+.nav-btn:hover { color:#fff; background:rgba(255,255,255,0.03); }
+.nav-btn.active { background:rgba(255,255,255,0.06); color:#fff; }
+
+/* Layout */
+.container { display:flex; gap:20px; max-width:1100px; margin:28px auto; padding:0 16px; }
+.feed-section { flex:1; }
+.right-panel { width:300px; }
+
+/* Cards */
+.card { background:#fff; border-radius:12px; padding:14px; box-shadow:0 6px 18px rgba(17,24,39,0.06); margin-bottom:16px; }
+.small-card { padding:12px; }
+
+/* Compose */
+.post-box { display:flex; flex-direction:column; gap:10px; }
+.compose-header { display:flex; gap:10px; align-items:center; }
+.avatar-small { width:40px; height:40px; border-radius:50%; background:#e6eefc; display:flex; align-items:center; justify-content:center; font-weight:700; color:#1d4ed8; }
+.compose-user { font-weight:600; color:#0f172a; }
+.compose-textarea { width:100%; min-height:90px; padding:12px; border-radius:10px; border:1px solid #e6eefc; background:#f7fbff; resize:none; outline:none; }
+
+/* Buttons */
+.btn { background:#1d4ed8; color:#fff; padding:8px 12px; border:none; border-radius:8px; cursor:pointer; font-weight:700; }
+.btn.secondary { background:#f1f5f9; color:#0f172a; border:1px solid #e6eefc; }
+.btn.small-btn { padding:6px 8px; font-size:13px; }
+
+/* Section title */
+.section-title { font-size:18px; margin:14px 0; font-weight:700; color:#0f172a; }
+
+/* Posts */
+.posts .post { margin-bottom:12px; padding:12px; border-radius:10px; display:block; background:#fff; box-shadow:0 4px 12px rgba(15,23,42,0.04); }
+.post .post-top { display:flex; gap:12px; align-items:center; margin-bottom:8px; }
+.avatar { width:48px; height:48px; border-radius:50%; background:#e6eefc; display:flex; align-items:center; justify-content:center; font-weight:700; color:#1d4ed8; font-size:18px; }
+.post .username { font-weight:700; }
+.post .time { color:#6b7280; font-size:12px; }
+.post .text { margin:8px 0; color:#0f172a; }
+.post img.post-image { width:100%; max-height:420px; object-fit:cover; border-radius:8px; margin-top:8px; }
+
+/* post actions */
+.post-actions { display:flex; gap:8px; align-items:center; margin-top:8px; }
+.action-btn { border:1px solid #e6eefc; background:transparent; padding:6px 9px; border-radius:8px; cursor:pointer; font-weight:700; }
+.action-count { color:#475569; font-size:13px; }
+
+/* Right panel */
+.session-card { text-align:center; padding-top:18px; }
+.avatar-large { width:84px; height:84px; border-radius:50%; margin:0 auto 8px; background:#e6eefc; display:flex; align-items:center; justify-content:center; font-weight:800; color:#1d4ed8; font-size:26px; }
+.session-username { font-weight:700; margin-bottom:6px; }
+.session-bio { color:#64748b; font-size:13px; }
+
+/* Users list */
+.users-list { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+.user-item { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:6px; border-radius:8px; background:#fbfdff; }
+
+/* Modal */
+.modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.5); z-index:80; }
+.modal-card { width:360px; background:#fff; border-radius:12px; padding:16px; box-shadow:0 10px 40px rgba(2,6,23,0.35); display:flex; flex-direction:column; gap:10px; }
+.auth-form input { width:100%; padding:10px; border-radius:8px; border:1px solid #eef2ff; margin-bottom:8px; }
+.link { color:#1d4ed8; cursor:pointer; font-weight:700; }
+.hidden { display:none !important; }
+
+/* Profile page */
+.page { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.35); z-index:90; padding:18px; }
+.profile-edit { display:flex; flex-direction:column; gap:8px; }
+
+/* Responsive */
+@media(max-width:900px) {
+  .container { flex-direction:column; padding:8px; }
+  .right-panel { width:100%; order:2; }
+}/* Reset / base */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: "Inter", sans-serif; }
+body { background: linear-gradient(180deg,#f6fbff 0%, #ffffff 100%); color:#0f172a; min-height:100vh; }
+
+/* NAV */
+.navbar { display:flex; justify-content:space-between; align-items:center; padding:12px 18px; background:#0d47a1; color:#fff; }
+.brand { display:flex; align-items:center; gap:10px; }
+.logo { width:44px; height:44px; background:#1565c0; display:flex; align-items:center; justify-content:center; border-radius:8px; font-weight:700; color:#fff; font-size:18px; }
+.brand-name { font-weight:700; font-size:18px; color:white; }
+.nav-actions { display:flex; gap:8px; align-items:center; }
+.nav-btn { background:transparent; color:#dbe7ff; border:none; padding:8px 10px; border-radius:6px; cursor:pointer; font-weight:600; }
+.nav-btn:hover { color:#fff; background:rgba(255,255,255,0.03); }
+.nav-btn.active { background:rgba(255,255,255,0.06); color:#fff; }
+
+/* Layout */
+.container { display:flex; gap:20px; max-width:1100px; margin:28px auto; padding:0 16px; }
+.feed-section { flex:1; }
+.right-panel { width:300px; }
+
+/* Cards */
+.card { background:#fff; border-radius:12px; padding:14px; box-shadow:0 6px 18px rgba(17,24,39,0.06); margin-bottom:16px; }
+.small-card { padding:12px; }
+
+/* Compose */
+.post-box { display:flex; flex-direction:column; gap:10px; }
+.compose-header { display:flex; gap:10px; align-items:center; }
+.avatar-small { width:40px; height:40px; border-radius:50%; background:#e6eefc; display:flex; align-items:center; justify-content:center; font-weight:700; color:#1d4ed8; }
+.compose-user { font-weight:600; color:#0f172a; }
+.compose-textarea { width:100%; min-height:90px; padding:12px; border-radius:10px; border:1px solid #e6eefc; background:#f7fbff; resize:none; outline:none; }
+
+/* Buttons */
+.btn { background:#1d4ed8; color:#fff; padding:8px 12px; border:none; border-radius:8px; cursor:pointer; font-weight:700; }
+.btn.secondary { background:#f1f5f9; color:#0f172a; border:1px solid #e6eefc; }
+.btn.small-btn { padding:6px 8px; font-size:13px; }
+
+/* Section title */
+.section-title { font-size:18px; margin:14px 0; font-weight:700; color:#0f172a; }
+
+/* Posts */
+.posts .post { margin-bottom:12px; padding:12px; border-radius:10px; display:block; background:#fff; box-shadow:0 4px 12px rgba(15,23,42,0.04); }
+.post .post-top { display:flex; gap:12px; align-items:center; margin-bottom:8px; }
+.avatar { width:48px; height:48px; border-radius:50%; background:#e6eefc; display:flex; align-items:center; justify-content:center; font-weight:700; color:#1d4ed8; font-size:18px; }
+.post .username { font-weight:700; }
+.post .time { color:#6b7280; font-size:12px; }
+.post .text { margin:8px 0; color:#0f172a; }
+.post img.post-image { width:100%; max-height:420px; object-fit:cover; border-radius:8px; margin-top:8px; }
+
+/* post actions */
+.post-actions { display:flex; gap:8px; align-items:center; margin-top:8px; }
+.action-btn { border:1px solid #e6eefc; background:transparent; padding:6px 9px; border-radius:8px; cursor:pointer; font-weight:700; }
+.action-count { color:#475569; font-size:13px; }
+
+/* Right panel */
+.session-card { text-align:center; padding-top:18px; }
+.avatar-large { width:84px; height:84px; border-radius:50%; margin:0 auto 8px; background:#e6eefc; display:flex; align-items:center; justify-content:center; font-weight:800; color:#1d4ed8; font-size:26px; }
+.session-username { font-weight:700; margin-bottom:6px; }
+.session-bio { color:#64748b; font-size:13px; }
+
+/* Users list */
+.users-list { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+.user-item { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:6px; border-radius:8px; background:#fbfdff; }
+
+/* Modal */
+.modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.5); z-index:80; }
+.modal-card { width:360px; background:#fff; border-radius:12px; padding:16px; box-shadow:0 10px 40px rgba(2,6,23,0.35); display:flex; flex-direction:column; gap:10px; }
+.auth-form input { width:100%; padding:10px; border-radius:8px; border:1px solid #eef2ff; margin-bottom:8px; }
+.link { color:#1d4ed8; cursor:pointer; font-weight:700; }
+.hidden { display:none !important; }
+
+/* Profile page */
+.page { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.35); z-index:90; padding:18px; }
+.profile-edit { display:flex; flex-direction:column; gap:8px; }
+
+/* Responsive */
+@media(max-width:900px) {
+  .container { flex-direction:column; padding:8px; }
+  .right-panel { width:100%; order:2; }
+                                   }
