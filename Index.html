@@ -5,8 +5,22 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>YLO — Rede Social (Local)</title>
   <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0d47a1">
+<link rel="apple-touch-icon" href="/icons/icon-192.svg"></head>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => {
+        console.log('Service Worker registrado:', reg.scope);
+      })
+      .catch(err => {
+        console.warn('Erro ao registrar Service Worker:', err);
+      });
+  });
+}
+</script><body>
   <header class="navbar">
     <div class="brand">
       <div class="logo">YLO</div>
