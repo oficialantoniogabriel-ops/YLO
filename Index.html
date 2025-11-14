@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YLO — Rede Social</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>YLO</h1>
+    </header>
+
+    <main>
+
+        <section id="auth-section">
+            <h2>Entrar na YLO</h2>
+
+            <input id="email" type="email" placeholder="Seu email">
+            <input id="password" type="password" placeholder="Sua senha">
+
+            <button onclick="signIn()">Entrar</button>
+            <button onclick="signUp()">Criar Conta</button>
+        </section>
+
+        <section id="feed-section" class="hidden">
+
+            <div id="user-area">
+                <span id="user-email"></span>
+                <button onclick="logout()">Sair</button>
+            </div>
+
+            <div id="post-box">
+                <textarea id="post-content" placeholder="O que se passa?"></textarea>
+                <button onclick="createPost()">Publicar</button>
+            </div>
+
+            <div id="feed"></div>
+        </section>
+
+    </main>
+
+    <script type="module" src="script.js"></script>
+</body>
+  </html><!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YLO — Rede Social</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>YLO</h1>
+    </header>
+
+    <main>
+
+        <section id="auth-section">
+            <h2>Entrar na YLO</h2>
+
+            <input id="email" type="email" placeholder="Seu email">
+            <input id="password" type="password" placeholder="Sua senha">
+
+            <button onclick="signIn()">Entrar</button>
+            <button onclick="signUp()">Criar Conta</button>
+        </section>
+
+        <section id="feed-section" class="hidden">
+
+            <div id="user-area">
+                <span id="user-email"></span>
+                <button onclick="logout()">Sair</button>
+            </div>
+
+            <div id="post-box">
+                <textarea id="post-content" placeholder="O que se passa?"></textarea>
+                <button onclick="createPost()">Publicar</button>
+            </div>
+
+            <div id="feed"></div>
+        </section>
+
+    </main>
+
+    <script type="module" src="script.js"></script>
+</body>
+  </html>
