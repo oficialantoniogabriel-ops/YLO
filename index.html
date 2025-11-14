@@ -1,0 +1,44 @@
+here<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YLO - Rede Social Moderna</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- GOOGLE FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <h1 class="logo">YLO</h1>
+    <nav class="menu">
+      <a href="#" class="active">Feed</a>
+      <a href="#">Perfil</a>
+      <a href="#">Mensagens</a>
+    </nav>
+  </header>
+
+  <!-- MAIN FEED -->
+  <main class="feed">
+
+    <!-- CARD DE POSTAGEM -->
+    <div class="post-box">
+      <textarea id="postText" placeholder="O que você está pensando?"></textarea>
+      <button class="btn" onclick="publicarPost()">Publicar</button>
+    </div>
+
+    <h2 class="section-title">Posts Recentes</h2>
+
+    <!-- LISTA DE POSTS -->
+    <div id="posts" class="posts"></div>
+
+  </main>
+
+<script src="app.js"></script>
+
+</body>
+      </html>
