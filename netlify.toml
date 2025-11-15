@@ -1,0 +1,6 @@
+[build]
+  publish = "./"   # A raiz contém o teu index.html
+  command = ""     # Não existe build
+
+[functions]
+  directory = "netlify/functions"
