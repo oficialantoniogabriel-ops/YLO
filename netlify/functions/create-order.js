@@ -1,6 +1,6 @@
 here// netlify/functions/create-order.js
 const fetch = require('node-fetch')
-const stripe = require('stripe')(process.env.STRIPE_SECRET)
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method not allowed' }
