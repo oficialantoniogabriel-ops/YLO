@@ -1,0 +1,30 @@
+// netlify/functions/create-product.js
+const fetch = require('node-fetch')
+
+exports.handler = async (event) => {
+  if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method not allowed' }
+  const auth = event.headers['authorization'] || ''
+  if (auth !== `Bearer ${process.env.NETLIFY_ADMIN_TOKEN}`) return { statusCode: 401, body: 'unauthorized' }
+
+  const body = JSON.parse(event.body)
+  const { name, description, price, seller_id, image_url } = body
+  if (!name || !price || !seller_id) return { statusCode: 400, body: 'missing fields' }
+
+  const res = await fetch(`${process.env.VITE_SUPABASE_URL}/rest/v1/produtos`, {
+    method: 'POST',
+    headers: {
+      'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY,
+      'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      vendedor_id: seller_id,
+      nome: name,
+      descricao: description || null,
+      preco: price,
+      imagem_url: image_url || null
+    })
+  })
+  const text = await res.text()
+  return { statusCode: res.status, body: text }
+}
