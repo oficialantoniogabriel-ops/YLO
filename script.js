@@ -484,3 +484,12 @@ document.getElementById('btnProfile').addEventListener('click', ()=> {
 
 /* finalize UI first-time: ensure demo user session not logged */
 updateUI();
+// criar produto (chamada do cliente autenticado / vendedor)
+async function createProductBackend(product) {
+  const res = await fetch('/.netlify/functions/create-product', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.NETLIFY_ADMIN_TOKEN}` },
+    body: JSON.stringify(product)
+  })
+  return await res.json()
+  }
