@@ -1,4 +1,4 @@
-/* YLO — Single-file app logic (localStorage) */
+GH/* YLO — Single-file app logic (localStorage) */
 /* Keys used: ylo_users, ylo_session, ylo_posts, ylo_likes, ylo_comments, ylo_messages, ylo_reels, ylo_settings, ylo_requests */
 
 const storage = {
@@ -492,4 +492,13 @@ async function createProductBackend(product) {
     body: JSON.stringify(product)
   })
   return await res.json()
+  }
+async function startCheckout(productId, quantity=1) {
+  const res = await fetch('/.netlify/functions/create-order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ product_id: productId, buyer_id: currentUserId, quantity, success_url: window.location.href + '?success=1' })
+  })
+  const data = await res.json()
+  window.location.href = data.checkoutUrl // redirect to Stripe Checkout
   }
