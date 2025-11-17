@@ -22,3 +22,23 @@
 
 </body>
   </html>
+<script>
+document.getElementById("register-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const nome = document.getElementById("register-name").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const senha = document.getElementById("register-password").value.trim();
+
+    if (!nome || !email || !senha) {
+        alert("Preencha todos os campos!");
+        return;
+    }
+
+    const user = { nome, email, senha };
+    localStorage.setItem("ylo_user", JSON.stringify(user));
+
+    alert("Conta criada com sucesso!");
+    window.location.href = "login.html";
+});
+  </script>
