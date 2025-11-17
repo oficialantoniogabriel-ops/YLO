@@ -1,12 +1,37 @@
-<!doctype html><html lang="pt"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Perfil — YLO</title><link rel="stylesheet" href="/src/style.css"></head><body>
-  <div style="padding:24px;max-width:800px;margin:auto">
-    <h2>Perfil — YLO</h2>
-    <div id="profile-root" class="card"></div>
-    <p><a href="/">Voltar</a></p>
-  </div>
-  <script>
-    const users = JSON.parse(localStorage.getItem('y_users')||'[]');
-    const me = users.find(u=>u.role==='founder') || users[0];
-    document.getElementById('profile-root').innerHTML = `<div style="display:flex;gap:12px;align-items:center"><div style="width:80px;height:80px;border-radius:12px;background:#eee">${me.username[0]}</div><div><h3>${me.username} ${me.verified?'<span style="color:#0ea5a4">✔</span>':''}</h3><div class="muted">${me.followers} seguidores</div></div></div><p style="margin-top:12px">${me.bio||'Sem bio'}</p>`;
-  </script>
-</body></html>
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Perfil — YLO</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">YLO</div>
+    <nav class="top-actions">
+      <a href="index.html" class="btn small">Início</a>
+      <a href="login.html" class="btn small">Entrar</a>
+    </nav>
+  </header>
+
+  <main class="container single">
+    <section class="profile-section card">
+      <div class="profile-top">
+        <div id="profile-avatar-large">U</div>
+        <div>
+          <h2 id="profile-username">Visitante</h2>
+          <div id="profile-bio" class="muted">Perfil pessoal</div>
+          <div id="profile-stats" class="muted">0 posts • 0 seguidores</div>
+        </div>
+        <div class="spacer"></div>
+        <button id="btn-edit-profile" class="btn">Editar Perfil</button>
+      </div>
+
+      <div id="profile-posts" style="margin-top:16px;"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+      </html>
