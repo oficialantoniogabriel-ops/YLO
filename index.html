@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YLO — Início</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">YLO <span class="badge-blue" title="Fundador">✔</span></div>
+    <div class="top-search">
+      <input id="global-search" placeholder="Pesquisar pessoas ou posts..." />
+    </div>
+    <nav class="top-actions">
+      <button id="nav-home" class="icon-btn" title="Início">🏠</button>
+      <button id="nav-reels" class="icon-btn" title="Reels">🎬</button>
+      <button id="nav-chat" class="icon-btn" title="Mensagens">💬</button>
+      <a href="perfil.html" class="profile-link" id="top-profile">U</a>
+      <a href="login.html" class="btn small" id="btn-login-top">Entrar</a>
+      <a href="register.html" class="btn primary small" id="btn-register-top">Criar Conta</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <aside class="left-col">
+      <div class="card profile-card" id="mini-profile">
+        <div id="mini-avatar">U</div>
+        <div>
+          <div id="mini-name">Visitante</div>
+          <div id="mini-followers" class="muted">0 seguidores</div>
+        </div>
+        <div class="spacer"></div>
+        <button id="btn-edit-profile-mini" class="btn small hidden">Editar</button>
+      </div>
+
+      <div class="card menu-card">
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="reels.html">Reels</a></li>
+          <li><a href="perfil.html">Meu Perfil</a></li>
+          <li><a href="privacy.html">Privacidade</a></li>
+        </ul>
+      </div>
+
+      <div class="card ad-card">
+        <strong>Anúncio</strong>
+        <p>Promoção simulada — espaço para anúncios</p>
+      </div>
+    </aside>
+
+    <section class="center-col">
+      <div class="card composer" id="composer" hidden>
+        <textarea id="post-text" placeholder="O que está a acontecer?"></textarea>
+        <div class="composer-row">
+          <input id="post-file" type="file" accept="image/*,video/*" />
+          <select id="currency-select" title="Seleciona moeda">
+            <option value="USD">USD</option>
+            <option value="AOA">AOA (Kz)</option>
+            <option value="EUR">EUR</option>
+          </select>
+          <button id="btn-post" class="btn primary">Publicar</button>
+        </div>
+      </div>
+
+      <div id="feed" class="feed"></div>
+    </section>
+
+    <aside class="right-col">
+      <div class="card monet-card">
+        <h4>Monetização</h4>
+        <p>Disponível a partir de <strong>5.000 seguidores</strong>.</p>
+        <button id="btn-request-monet" class="btn">Pedir Monetização</button>
+      </div>
+
+      <div class="card support-card">
+        <h4>Suporte</h4>
+        <button id="btn-open-support" class="btn small">Abrir Ajuda</button>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    © YLO — Todos os direitos reservados • <a href="terms.html">Termos</a> • <a href="privacy.html">Privacidade</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+  </html>
