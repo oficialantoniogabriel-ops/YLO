@@ -1,0 +1,72 @@
+here:root{
+  --bg:#071225; --card:#0b1724; --muted:#9aa5b1; --accent:#3b82f6; --white:#e6eef8;
+  --glass: rgba(255,255,255,0.03);
+  --glass-2: rgba(255,255,255,0.02);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:var(--white);background:linear-gradient(180deg,#031025 0%, #071225 100%)}
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{height:60px;display:flex;justify-content:space-between;align-items:center;padding:0 12px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0));backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,0.02)}
+.brand{font-weight:800;display:flex;gap:10px;align-items:center}
+.founder{background:linear-gradient(90deg,#1f6fff,#7ad7ff);padding:4px 8px;border-radius:10px;font-size:12px;color:#021;display:flex;align-items:center;gap:6px}
+.icon{width:20px;height:20px;fill:var(--white)}
+.icon.small{width:14px;height:14px}
+.icon-btn{background:transparent;border:0;padding:8px;border-radius:8px;color:var(--white)}
+.top-actions{display:flex;gap:6px;align-items:center}
+
+/* main screens */
+#screens{flex:1;position:relative;overflow:auto}
+.screen{position:absolute;inset:60px 0 60px 0;padding:14px;overflow:auto;transform:translateY(8px);opacity:0;pointer-events:none;transition:all .22s ease}
+.screen.active{transform:none;opacity:1;pointer-events:auto}
+.layout{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.center-col{padding-bottom:80px}
+
+/* cards */
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.5)}
+.composer textarea, input[type="text"], input[type="file"], select {width:100%;padding:10px;border-radius:8px;border:0;background:var(--glass);color:var(--white)}
+
+/* composer */
+.composer{display:flex;flex-direction:column;gap:10px}
+.composer .row{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--white)}
+.btn.primary{background:var(--accent);color:#022;border:box-shadow:0 8px 20px rgba(59,130,246,0.12)}
+
+/* feed */
+.feed-list{display:flex;flex-direction:column;gap:10px}
+.post .meta{display:flex;gap:10px;align-items:center}
+.avatar{width:48px;height:48px;border-radius:50%;background:#123;color:white;display:flex;align-items:center;justify-content:center;font-weight:700}
+.post img, .post video{width:100%;border-radius:8px;margin-top:8px}
+.post-actions{display:flex;gap:8px;margin-top:8px}
+
+/* reels */
+.reels-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+
+/* chat layout */
+.chat-layout{display:flex;gap:12px}
+.chat-people{width:220px;min-width:160px;max-width:280px}
+.chat-window{flex:1;display:flex;flex-direction:column}
+.chat-head{padding:8px;border-bottom:1px solid rgba(255,255,255,0.02)}
+.chat-messages{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+.chat-composer{display:flex;gap:8px;padding:8px;border-top:1px solid rgba(255,255,255,0.02)}
+
+/* search */
+#search-input{padding:10px;border-radius:10px;border:0;background:var(--glass);color:var(--white)}
+
+/* bottom nav */
+.bottombar{height:60px;display:flex;gap:6px;padding:6px;background:linear-gradient(180deg, rgba(0,0,0,0.12), transparent);align-items:center;justify-content:space-around;position:fixed;bottom:0;left:0;right:0;border-top:1px solid rgba(255,255,255,0.02)}
+.tab{background:transparent;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;font-size:12px;gap:4px}
+.tab.active{color:var(--white)}
+.app-footer{position:fixed;left:12px;bottom:70px;color:var(--muted);font-size:12px}
+.copy{margin-top:6px}
+
+/* small screens adjustments */
+@media(min-width:980px){
+  .screen{left:120px;right:120px;top:80px;bottom:80px}
+  .bottombar{display:none}
+}
+
+/* subtle animations */
+.tab, .icon-btn{transition:transform .12s ease, color .12s ease}
+.tab:hover, .icon-btn:hover{transform:translateY(-3px)}
+.card{transition:transform .12s ease}
+.card:hover{transform:translateY(-4px)}
