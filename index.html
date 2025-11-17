@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>YLO — Rede Social (único ficheiro)</title>
+  <style>
+    :root{--bg:#f4f6fb;--card:#fff;--primary:#2563eb;--muted:#6b7280;--accent:#0ea5a1}
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#0f172a;background:var(--bg);margin:0}
+    header.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:linear-gradient(90deg,#0d47a1,#1e90ff);color:#fff;position:sticky;top:0;z-index:50}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .brand svg{width:28px;height:28px}
+    .top-actions{display:flex;align-items:center;gap:8px}
+    .search-wrap{position:relative}
+    input.search{padding:8px 36px 8px 12px;border-radius:999px;border:none;min-width:220px}
+    button.icon-btn{background:transparent;border:none;position:absolute;right:6px;top:6px;cursor:pointer}
+    .search-dropdown{position:absolute;top:44px;left:0;width:320px;background:var(--card);border-radius:8px;box-shadow:0 8px 24px rgba(2,6,23,0.08);overflow:hidden;z-index:60}
+    .search-dropdown .item{padding:10px;border-bottom:1px solid #f1f5f9;cursor:pointer}
+    .layout{display:grid;grid-template-columns:260px 1fr 320px;gap:16px;max-width:1200px;margin:16px auto;padding:8px}
+    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+    .left,.right{height:calc(100vh - 120px);overflow:auto}
+    .profile .avatar{width:84px;height:84px;border-radius:50%;background:#e6eefc;display:flex;align-items:center;justify-content:center;font-weight:700;margin:0 auto}
+    .left-actions{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+    .tab-btn{background:transparent;border:none;padding:10px;border-radius:8px;text-align:left;cursor:pointer}
+    .tab-btn.active{background:linear-gradient(90deg,rgba(37,99,235,0.08),rgba(37,99,235,0.04))}
+    .composer textarea{width:100%;border-radius:12px;border:1px solid #eef2ff;padding:10px;min-height:76px}
+    .feed{display:flex;flex-direction:column;gap:12px}
+    .post{padding:12px;border-radius:12px}
+    .post .meta{display:flex;gap:10px;align-items:center}
+    .post .avatar{width:44px;height:44px;border-radius:50%;background:#e6eefc;display:flex;align-items:center;justify-content:center}
+    .post-actions{display:flex;gap:8px;margin-top:8px}
+    .muted{color:var(--muted);font-size:13px}
+    .reel{width:100%;border-radius:8px;overflow:hidden}
+    .reel img, .reel video{width:100%;display:block}
+    .chat-panel{position:fixed;right:12px;bottom:12px;width:360px;height:68vh;border-radius:12px;box-shadow:0 18px 60px rgba(2,6,23,0.15);overflow:hidden;background:var(--card)}
+    .chat-panel.hidden{display:none}
+    .modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(2,6,23,0.4);display:flex;align-items:center;justify-content:center}
+    .modal.hidden{display:none}
+    .modal-card{width:100%;max-width:560px;border-radius:12px;padding:18px;background:var(--card);position:relative}
+    .modal-close{position:absolute;right:18px;top:18px;border:none;background:none;font-size:18px;cursor:pointer}
+    footer.footer{text-align:center;padding:12px;color:var(--muted)}
+    .badge-small{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:var(--accent);color:white;font-weight:700}
+    .btn{padding:8px 10px;border-radius:8px;border:none;background:#eef2ff;cursor:pointer}
+    .btn.primary{background:var(--primary);color:white}
+    .btn.small{padding:6px 8px;font-size:13px}
+    .linkish{background:none;border:none;color:var(--primary);cursor:pointer;padding:6px 8px;border-radius:6px}
+    @media(max-width:980px){.layout{grid-template-columns:1fr}.left,.right{display:none}.search-dropdown{left:10px;width:calc(100% - 20px)}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <!-- small logo SVG -->
+      <svg viewBox="0 0 24 24" aria-hidden><path fill="#fff" d="M3 10.5L12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10.5z"/></svg>
+      <div>YLO</div>
+      <div id="founder-badge" class="badge-small" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24"><path fill="#fff" d="M12 2l1.8 3.6L18 7l-3.6 1.4L12 12l-2.4-3.6L6 7l4.2-1.4L12 2z"/></svg> António Ndala</div>
+    </div>
+
+    <div class="top-actions">
+      <div class="search-wrap">
+        <input id="global-search" class="search" placeholder="Pesquisar pessoas ou posts..." autocomplete="off">
+        <button id="search-clear" class="icon-btn" title="Limpar">✕</button>
+        <div id="search-results" class="search-dropdown" style="display:none"></div>
+      </div>
+
+      <button id="btn-open-support" class="btn small">Ajuda</button>
+      <button id="btn-open-settings" class="btn small">Config</button>
+      <button id="btn-open-chat" class="btn small">Chat</button>
+      <button id="nav-login" class="btn primary">Entrar / Registar</button>
+      <button id="nav-logout" class="btn danger" style="display:none">Sair</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="left">
+      <div class="card profile">
+        <div id="session-avatar" class="avatar">U</div>
+        <div id="session-name">Visitante</div>
+        <div id="session-bio" class="muted">Faça login para interagir</div>
+        <div style="margin-top:10px">
+          <button class="tab-btn active" data-tab="home" id="nav-home">Início</button>
+          <button class="tab-btn" data-tab="friends" id="nav-friends">Amigos</button>
+          <button class="tab-btn" data-tab="reels" id="nav-reels">Reels</button>
+          <button class="tab-btn" data-tab="monet" id="nav-monet">Monetização</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <input id="aside-search" placeholder="Pesquisar usuários..." style="width:100%;padding:8px;border-radius:8px;border:1px solid #eef2ff">
+        <div id="aside-results"></div>
+      </div>
+    </aside>
+
+    <section class="center">
+      <div id="composer" class="card composer" style="display:none">
+        <textarea id="post-content" placeholder="O que estás a pensar?"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <input id="post-image" type="file" accept="image/*,video/*">
+          <button id="btn-post" class="btn primary">Publicar</button>
+        </div>
+      </div>
+
+      <div id="home" class="page">
+        <div id="feed" class="feed"></div>
+      </div>
+
+      <div id="friends" class="page" style="display:none">
+        <h3>Amigos</h3>
+        <div id="friends-list"></div>
+      </div>
+
+      <div id="reels" class="page" style="display:none">
+        <h3>Reels</h3>
+        <div id="reels-view"></div>
+      </div>
+
+      <div id="monet" class="page" style="display:none">
+        <h3>Monetização</h3>
+        <div id="monet-info"></div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="card">
+        <h4>Mensagens</h4>
+        <div id="recent-chats"></div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>Sugestões</h4>
+        <div id="suggestions"></div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="chat-panel" class="chat-panel" style="display:none">
+    <div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eef2ff">
+      <strong>Chat</strong><button id="chat-close" class="btn small">Fechar</button>
+    </div>
+    <div style="display:flex;height:calc(100% - 44px)">
+      <div id="conv-list" style="width:36%;border-right:1px solid #eef2ff;padding:8px;overflow:auto"></div>
+      <div id="conv-window" style="flex:1;padding:8px;display:none">
+        <div id="conv-head"></div>
+        <div id="conv-messages" style="height:70%;overflow:auto;border:1px solid #f1f5f9;padding:8px;margin:8px 0"></div>
+        <div style="display:flex;gap:8px">
+          <input id="conv-input" style="flex:1;padding:8px;border-radius:8px;border:1px solid #eef2ff">
+          <button id="conv-send" class="btn small">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal" class="modal" style="display:none">
+    <div class="modal-card">
+      <button id="modal-close" class="modal-close">✕</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="footer">© <span id="current-year"></span> YLO — Todos os direitos reservados.</footer>
+
+  <script>
+  /* ------------------------------
+     YLO - single file app (local)
+     - localStorage based demo
+     - features: auth (email/phone), posts (img/video via dataURL), likes, comments,
+       search (global + aside), reels, chat (simulated), monetization rule,
+       founder badge (António Ndala) and basic UI handlers.
+  -------------------------------*/
+
+  // simple storage wrapper
+  const LS = {
+    get(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); } catch(e){ return null; } },
+    set(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+  };
+
+  // ensure initial state
+  if(!LS.get('y_users')) {
+    LS.set('y_users', [
+      { id:'u_demo', username:'demo', email:'demo@ylo.local', avatar:null, verified:true, followers:6000, createdAt: new Date().toISOString(), bio:'Conta demo' }
+    ]);
+  }
+  if(!LS.get('y_session')) LS.set('y_session', null);
+  if(!LS.get('y_posts')) LS.set('y_posts', [{ id:'p1', userId:'u_demo', text:'Olá mundo em YLO!', media:null, createdAt: new Date().toLocaleString() }]);
+  if(!LS.get('y_likes')) LS.set('y_likes', []);
+  if(!LS.get('y_comments')) LS.set('y_comments', []);
+  if(!LS.get('y_friends')) LS.set('y_friends', []);
+  if(!LS.get('y_reels')) LS.set('y_reels', [
+    {id:'r1', type:'img', src:'https://picsum.photos/seed/1/800/600', title:'Sunset'},
+    {id:'r2', type:'img', src:'https://picsum.photos/seed/2/800/600', title:'City'},
+    {id:'r3', type:'img', src:'https://picsum.photos/seed/3/800/600', title:'Ocean'}
+  ]);
+  if(!LS.get('y_settings')) LS.set('y_settings', { monetizeEnabled:false });
+
+  // helpers
+  const uid = ()=> Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+  const now = ()=> new Date().toLocaleString();
+  const daysBetween = (d1, d2=new Date())=> Math.floor((new Date(d2)-new Date(d1))/(1000*60*60*24));
+  function findUser(id){ return (LS.get('y_users')||[]).find(u=>u.id===id) || null; }
+
+  // DOM
+  const dom = {
+    globalSearch: document.getElementById('global-search'),
+    searchResults: document.getElementById('search-results'),
+    asideSearch: document.getElementById('aside-search'),
+    asideResults: document.getElementById('aside-results'),
+    feed: document.getElementById('feed'),
+    composer: document.getElementById('composer'),
+    btnPost: document.getElementById('btn-post'),
+    postContent: document.getElementById('post-content'),
+    postImage: document.getElementById('post-image'),
+    navLogin: document.getElementById('nav-login'),
+    navLogout: document.getElementById('nav-logout'),
+    modal: document.getElementById('modal'),
+    modalBody: document.getElementById('modal-body'),
+    modalClose: document.getElementById('modal-close'),
+    chatPanel: document.getElementById('chat-panel'),
+    convList: document.getElementById('conv-list'),
+    convWindow: document.getElementById('conv-window'),
+    convHead: document.getElementById('conv-head'),
+    convMessages: document.getElementById('conv-messages'),
+    convInput: document.getElementById('conv-input'),
+    convSend: document.getElementById('conv-send'),
+    monetInfo: document.getElementById('monet-info'),
+    founderBadge: document.getElementById('founder-badge'),
+    currentYear: document.getElementById('current-year'),
+    sessionName: document.getElementById('session-name'),
+    sessionAvatar: document.getElementById('session-avatar'),
+    sessionBio: document.getElementById('session-bio'),
+    friendsList: document.getElementById('friends-list'),
+    reelsView: document.getElementById('reels-view'),
+    suggestions: document.getElementById('suggestions'),
+    recentChats: document.getElementById('recent-chats')
+  };
+
+  // app start
+  function start() {
+    dom.currentYear && (dom.currentYear.innerText = new Date().getFullYear());
+    dom.globalSearch && dom.globalSearch.addEventListener('input', debounce(onSearchInput,160));
+    document.getElementById('search-clear').addEventListener('click', ()=>{ dom.globalSearch.value=''; dom.searchResults.style.display='none'; });
+    dom.asideSearch && dom.asideSearch.addEventListener('input', debounce(onAsideSearch,160));
+    dom.modalClose.addEventListener('click', ()=> dom.modal.style.display='none');
+    document.getElementById('btn-open-chat').addEventListener('click', ()=> { dom.chatPanel.style.display = dom.chatPanel.style.display === 'none' ? 'block' : 'none'; });
+    document.getElementById('chat-close').addEventListener('click', ()=> dom.chatPanel.style.display='none');
+    dom.navLogin.addEventListener('click', showAuth);
+    dom.navLogout.addEventListener('click', ()=> { LS.set('y_session', null); renderAll(); });
+    document.querySelectorAll('.tab-btn').forEach(b=> b.addEventListener('click', ()=> switchTab(b.dataset.tab)));
+    dom.btnPost.addEventListener('click', createPost);
+    document.getElementById('nav-home').click();
+    renderAll();
+  }
+
+  function debounce(fn, ms=200){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); }; }
+
+  // search
+  function onSearchInput(e){ runSearch(e.target.value.trim()); }
+  function runSearch(q){
+    const resEl = dom.searchResults; resEl.innerHTML=''; if(!q){ resEl.style.display='none'; return; }
+    const users = (LS.get('y_users')||[]).filter(u=> u.username?.toLowerCase().includes(q.toLowerCase()));
+    const posts = (LS.get('y_posts')||[]).filter(p=> p.text?.toLowerCase().includes(q.toLowerCase()));
+    users.forEach(u=>{
+      const el = document.createElement('div'); el.className='item'; el.textContent = u.username + (u.verified? ' ✔':''); el.onclick = ()=>{ openProfile(u.id); resEl.style.display='none'; dom.globalSearch.value=''; };
+      resEl.appendChild(el);
+    });
+    posts.forEach(p=>{
+      const el = document.createElement('div'); el.className='item'; el.textContent = (p.text||'').slice(0,140); resEl.appendChild(el);
+    });
+    resEl.style.display = resEl.children.length? 'block':'none';
+  }
+
+  function onAsideSearch(){ const q = dom.asideSearch.value.trim(); dom.asideResults.innerHTML=''; if(!q) return; const users = (LS.get('y_users')||[]).filter(u=>u.username?.toLowerCase().includes(q.toLowerCase())); users.forEach(u=>{ const d=document.createElement('div'); d.innerHTML = `${u.username} <button class="btn small" onclick="openChatWith('${u.id}')">Chat</button>`; dom.asideResults.appendChild(d); }); }
+
+  // posts
+  async function createPost(){
+    const s = LS.get('y_session'); if(!s) return showAuth();
+    const text = (dom.postContent.value||'').trim(); const file = dom.postImage.files?.[0];
+    if(!text && !file) return alert('Adiciona texto ou imagem.');
+    let media = null; if(file) media = await fileToDataURL(file);
+    const posts = LS.get('y_posts')||[]; posts.unshift({ id: uid(), userId: s.id, text, media, createdAt: now() });
+    LS.set('y_posts', posts); dom.postContent.value=''; dom.postImage.value=''; renderFeed();
+  }
+
+  function fileToDataURL(file){ return new Promise(res=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(file); }); }
+
+  function renderAll(){ renderSession(); renderFeed(); renderFriends(); renderReels(); renderMonet(); renderFounderBadge(); renderSuggestions(); renderChats(); }
+  function renderSession(){
+    const s = LS.get('y_session'); const users = LS.get('y_users')||[];
+    const nameEl = dom.sessionName, bioEl = dom.sessionBio, avatarEl = dom.sessionAvatar;
+    if(s){ const u = users.find(x=>x.id===s.id); nameEl.innerText = u.username; bioEl.innerText = u.bio||''; avatarEl.innerText = (u.username||'U')[0]; dom.composer.style.display='block'; dom.navLogin.style.display='none'; dom.navLogout.style.display='inline-block'; } else { nameEl.innerText='Visitante'; bioEl.innerText='Faça login para interagir'; avatarEl.innerText='U'; dom.composer.style.display='none'; dom.navLogin.style.display='inline-block'; dom.navLogout.style.display='none'; }
+  }
+
+  function renderFeed(){
+    const posts = LS.get('y_posts')||[]; dom.feed.innerHTML='';
+    posts.forEach(p=>{
+      const u = findUser(p.userId) || { username:'Usuário' };
+      const div = document.createElement('div'); div.className='post card';
+      div.innerHTML = `<div class="meta"><div class="avatar">${u.username[0]}</div><div style="flex:1"><div><strong>${u.username}${u.verified? ' <span style="color:var(--accent)">✔</span>':''}</strong></div><div class="muted">${p.createdAt}</div></div></div><div class="content">${escapeHtml(p.text||'')}</div>${p.media? (p.media.startsWith('data:video')? `<video controls src="${p.media}" style="width:100%;border-radius:8px;margin-top:8px"></video>`: `<img src="${p.media}" style="width:100%;border-radius:8px;margin-top:8px"/>`):''}<div class="post-actions"><button class="btn small" onclick="toggleLike('${p.id}')">❤ ${countLikes(p.id)}</button><button class="btn small" onclick="openComments('${p.id}')">💬</button><button class="btn small" onclick="sharePost('${p.id}')">🔗</button></div>`;
+      dom.feed.appendChild(div);
+    });
+  }
+  function countLikes(postId){ return (LS.get('y_likes')||[]).filter(l=>l.postId===postId).length; }
+  function toggleLike(postId){
+    const s = LS.get('y_session'); if(!s) return showAuth();
+    let likes = LS.get('y_likes')||[]; const ex = likes.find(l=>l.postId===postId && l.userId===s.id);
+    if(ex) likes = likes.filter(l=>!(l.postId===postId && l.userId===s.id)); else likes.push({ id: uid(), postId, userId: s.id, at: now() });
+    LS.set('y_likes', likes); renderFeed();
+  }
+  window.toggleLike = toggleLike;
+
+  function openComments(postId){ const comments = (LS.get('y_comments')||[]).filter(c=>c.postId===postId); let html = `<h4>Comentários</h4><div style="max-height:240px;overflow:auto">`; comments.forEach(c=>{ const u=findUser(c.userId)||{username:'U'}; html+=`<div style="border-top:1px solid #f1f5f9;padding:6px"><strong>${u.username}</strong><div class="muted" style="font-size:12px">${c.at}</div><div>${escapeHtml(c.text)}</div></div>`; }); html+=`</div><div style="margin-top:8px"><input id="cinput" placeholder="Escreve..." style="width:100%;padding:8px;border-radius:8px;border:1px solid #eef2ff"/><div style="display:flex;gap:8px;margin-top:6px"><button id="sendc" class="btn primary">Enviar</button></div></div>`; showModal(html); document.getElementById('sendc').addEventListener('click', ()=>{ const t=document.getElementById('cinput').value.trim(); if(!t) return alert('Escreve algo'); const s=LS.get('y_session'); if(!s) { closeModal(); return showAuth(); } const comments2 = LS.get('y_comments')||[]; comments2.push({ id:uid(), postId, userId: s.id, text:t, at: now() }); LS.set('y_comments', comments2); closeModal(); renderFeed(); });
+  }
+  function sharePost(postId){ navigator.clipboard?.writeText(location.href+'?share='+postId).then(()=> alert('Link copiado!'), ()=> alert('Link: '+location.href+'?share='+postId)); }
+  window.openComments = openComments; window.sharePost = sharePost;
+
+  // friends
+  function renderFriends(){ dom.friendsList.innerHTML=''; const friends = LS.get('y_friends')||[]; if(!friends.length) dom.friendsList.innerHTML='<div class="muted">Sem amigos ainda</div>'; friends.forEach(f=>{ const d=document.createElement('div'); d.className='card'; d.style.marginBottom='8px'; d.innerText = f.username; dom.friendsList.appendChild(d); }); }
+
+  // reels
+  let reelIndex = 0;
+  function renderReels(){ const reels = LS.get('y_reels')||[]; dom.reelsView.innerHTML=''; if(!reels.length) return dom.reelsView.innerText='Sem reels'; const r = reels[reelIndex%reels.length]; const div=document.createElement('div'); div.className='reel card'; div.innerHTML = r.type==='img'? `<img src="${r.src}" alt="${r.title}">` : `<video controls src="${r.src}"></video>`; dom.reelsView.appendChild(div); }
+  window.prevReel = ()=>{ reelIndex = Math.max(0,reelIndex-1); renderReels(); };
+  window.nextReel = ()=>{ reelIndex++; renderReels(); }
+
+  // chat (simple stub)
+  function renderChats(){ dom.convList.innerHTML=''; const users = LS.get('y_users')||[]; users.forEach(u=>{ const b=document.createElement('div'); b.style.padding='8px'; b.style.borderBottom='1px solid #f1f5f9'; b.innerHTML = `<strong>${u.username}</strong><div class="muted">${u.email||''}</div><button class="btn small" style="margin-top:6px" onclick="openChat('${u.id}')">Abrir</button>`; dom.convList.appendChild(b); }); }
+  window.openChat = (id)=>{ dom.convWindow.style.display='block'; const u=findUser(id); dom.convHead.innerText = u.username; dom.convMessages.innerHTML=''; const msgs = (LS.get('y_msgs')||[]).filter(m=> (m.from===id || m.to===id)); msgs.forEach(m=>{ const d=document.createElement('div'); d.innerHTML = `<div><strong>${m.from===id?u.username:'Eu'}</strong> <div class="muted" style="font-size:12px">${m.at}</div><div>${m.text}</div></div>`; dom.convMessages.appendChild(d); }); dom.convSend.onclick = ()=>{ const t = dom.convInput.value.trim(); if(!t) return; const s = LS.get('y_session'); if(!s) return showAuth(); const msgs2 = LS.get('y_msgs')||[]; msgs2.push({ id:uid(), from:s.id, to:id, text:t, at: now() }); LS.set('y_msgs', msgs2); dom.convInput.value=''; openChat(id); }; }
+
+  window.openChatWith = (id)=>{ dom.chatPanel.style.display = 'block'; openChat(id); }
+
+  // settings & monetization
+  function renderMonet(){
+    const el = document.getElementById('monet-info'); if(!el) return;
+    const s = LS.get('y_session'); el.innerHTML=''; if(!s) return el.innerHTML = '<div class="muted">Faz login para ver monetização.</div>';
+    const u = findUser(s.id); const requiredFollowers = 5000; const maxDays = 30; const ageDays = daysBetween(u.createdAt);
+    if(u.followers >= requiredFollowers && ageDays <= maxDays) {
+      el.innerHTML = `<div>Parabéns — a monetização está disponível!<br><small>Seguidores: ${u.followers} • Conta: ${ageDays} dias</small><div style="margin-top:8px"><button class="btn primary" onclick="requestMonet()">Ativar Monetização</button></div></div>`;
+    } else {
+      el.innerHTML = `<div class="muted">Monetização disponível apenas para novos usuários (≤ ${maxDays} dias) com ≥ ${requiredFollowers.toLocaleString()} seguidores. Tens ${u.followers} seguidores • Conta: ${ageDays} dias</div>`;
+    }
+  }
+  window.requestMonet = ()=>{ alert('Pedido de monetização enviado (simulado).'); const s=LS.get('y_session'); const users=LS.get('y_users'); const u=users.find(x=>x.id===s.id); u.monetRequest = { at: new Date().toISOString(), status:'pending' }; LS.set('y_users', users); renderMonet(); }
+
+  // founder badge logic
+  function renderFounderBadge(){ const users = LS.get('y_users')||[]; const founder = users.find(u=> (u.username||'').toLowerCase().includes('antónio') || (u.username||'').toLowerCase().includes('antonio')); if(founder && founder.verified){ dom.founderBadge.style.display='inline-flex'; } else dom.founderBadge.style.display='none'; }
+
+  // helpers & UI
+  function switchTab(tab){ document.querySelectorAll('.page').forEach(p=>p.style.display='none'); document.getElementById(tab).style.display='block'; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab)); }
+  function showModal(html){ dom.modalBody.innerHTML = html; dom.modal.style.display='flex'; }
+  function closeModal(){ dom.modal.style.display='none'; dom.modalBody.innerHTML=''; }
+  window.showModal = showModal; window.closeModal = closeModal;
+  function showAuth(){
+    showModal(`<h3>Entrar / Registar</h3>
+      <input id="auth-identifier" placeholder="Email ou número (+244...)" style="width:100%;padding:8px;border-radius:8px;border:1px solid #eef2ff"/>
+      <input id="auth-password" placeholder="Senha (demo) " type="password" style="width:100%;padding:8px;border-radius:8px;border:1px solid #eef2ff;margin-top:8px"/>
+      <input id="auth-username" placeholder="Nome (apenas para registro)" style="width:100%;padding:8px;border-radius:8px;border:1px solid #eef2ff;margin-top:8px"/>
+      <div style="display:flex;gap:8px;margin-top:8px"><button id="auth-register" class="btn primary">Registar</button><button id="auth-login" class="btn">Entrar</button></div>`);
+    document.getElementById('auth-register').onclick = ()=>{
+      const idv = document.getElementById('auth-identifier').value.trim(); const name = document.getElementById('auth-username').value.trim() || idv.split('@')[0]; if(!idv) return alert('Coloca email/telefone'); const users = LS.get('y_users')||[]; if(users.find(u=>u.email===idv||u.phone===idv)) return alert('Usuário existe'); const newU = { id:uid(), username:name, email: idv.includes('@')?idv:null, phone: idv.includes('@')?null:idv, createdAt: new Date().toISOString(), followers:0, verified:false }; users.push(newU); LS.set('y_users', users); LS.set('y_session', { id: newU.id }); closeModal(); renderAll(); alert('Registrado e logado (demo)');
+    };
+    document.getElementById('auth-login').onclick = ()=>{
+      const idv = document.getElementById('auth-identifier').value.trim(); const users = LS.get('y_users')||[]; const u = users.find(x=> x.email===idv || x.phone===idv); if(!u) return alert('Usuário não encontrado. Registe-se.'); LS.set('y_session', { id: u.id }); closeModal(); renderAll(); alert('Login OK (demo)');
+    };
+  }
+
+  // small utils
+  function escapeHtml(s){ return (s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+  function uid2(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+  window.openProfile = (id)=> alert('Abrir perfil: '+id);
+  window.openChatWith = (id)=> openChatWith(id);
+
+  function openChatWith(id){ dom.chatPanel.style.display='block'; openChat(id); }
+
+  // suggestions & chats render
+  function renderSuggestions(){ dom.suggestions.innerHTML=''; (LS.get('y_users')||[]).slice(0,5).forEach(u=>{ if(u.id==='u_demo') return; const d=document.createElement('div'); d.style.padding='6px 0'; d.innerHTML = `${u.username} <button class="btn small" onclick="openChatWith('${u.id}')">Chat</button> <button class="btn small" onclick="followUser('${u.id}')">Seguir</button>`; dom.suggestions.appendChild(d); }); }
+  function renderChats(){ dom.recentChats.innerHTML=''; (LS.get('y_users')||[]).slice(0,5).forEach(u=>{ const d=document.createElement('div'); d.style.padding='6px 0'; d.innerHTML = `<div><strong>${u.username}</strong></div><div class="muted">${u.email||''}</div>`; dom.recentChats.appendChild(d); }); }
+  function followUser(id){ const s = LS.get('y_session'); if(!s) return showAuth(); let follows = LS.get('y_friends')||[]; if(follows.find(f=>f.id===id)) return alert('Já segues'); const u = findUser(id); follows.push({ id:u.id, username:u.username }); LS.set('y_friends', follows); alert('Seguido'); renderFriends(); renderSuggestions(); }
+
+  // render friends list
+  function renderFriends(){ dom.friendsList.innerHTML=''; const fs = LS.get('y_friends')||[]; if(!fs.length) dom.friendsList.innerHTML='<div class="muted">Sem amigos</div>'; fs.forEach(f=>{ const d=document.createElement('div'); d.className='card'; d.style.marginBottom='8px'; d.innerText = f.username; dom.friendsList.appendChild(d); }); }
+
+  // modal helpers
+  function closeModal(){ dom.modal.style.display='none'; dom.modalBody.innerHTML=''; }
+  window.closeModal = closeModal; window.showModal = showModal;
+
+  // founder helper: run this in console if you want to add founder user quickly:
+  // let users = JSON.parse(localStorage.getItem('y_users')||'[]'); users.push({ id:'founder', username:'António Ndala', email:'founder@ylo.local', verified:true, followers:999999, createdAt:new Date().toISOString() }); localStorage.setItem('y_users', JSON.stringify(users)); localStorage.setItem('y_session', JSON.stringify({id:'founder'})); location.reload();
+  // (Esse snippet também está documentado no README se adicionares.)
+
+  // utilities used by multiple handlers
+  function fileToDataURL(file){ return new Promise(res=>{ const r = new FileReader(); r.onload = ()=> res(r.result); r.readAsDataURL(file); }); }
+
+  // initial render helpers
+  function renderReels(){ const reels = LS.get('y_reels')||[]; dom.reelsView.innerHTML=''; if(!reels.length) return dom.reelsView.innerText='Sem reels'; reelIndex = reelIndex||0; const r = reels[reelIndex%reels.length]; dom.reelsView.innerHTML = `<div class="card"><div style="font-weight:700">${r.title}</div><div style="margin-top:8px"><img src="${r.src}" style="width:100%;border-radius:8px"></div></div><div style="display:flex;gap:8px;margin-top:8px"><button class="btn small" onclick="prevReel()">◀</button><button class="btn small" onclick="nextReel()">▶</button></div>`; }
+  window.prevReel = ()=>{ reelIndex = Math.max(0,(reelIndex||0)-1); renderReels(); }
+  window.nextReel = ()=>{ reelIndex = (reelIndex||0)+1; renderReels(); }
+
+  // basic profile open
+  function openProfile(id){ const u = findUser(id); if(!u) return alert('Usuário não encontrado'); showModal(`<h3>${u.username}${u.verified? ' ✔':''}</h3><div>${u.bio||''}</div><div class="muted">Seguidores: ${u.followers||0}</div>`); }
+
+  // small helper that shows monetization state
+  function renderMonet(){ const el = document.getElementById('monet-info'); if(!el) return; el.innerHTML=''; const s = LS.get('y_session'); if(!s) return el.innerHTML='<div class="muted">Faz login para ver monetização</div>'; const u = findUser(s.id); const requiredFollowers = 5000; const maxDays = 30; const ageDays = daysBetween(u.createdAt); if(u.followers >= requiredFollowers && ageDays <= maxDays){ el.innerHTML = `<div>Monetização disponível! Seguidores: ${u.followers} • Conta: ${ageDays} dias<br><button class="btn primary" onclick="requestMonet()">Ativar</button></div>`; } else { el.innerHTML = `<div class="muted">Monetização: requerido ≥ ${requiredFollowers} seguidores e ≤ ${maxDays} dias. Tens ${u.followers} seguidores; conta: ${ageDays} dias</div>`; } }
+  window.requestMonet = ()=>{ alert('Pedido enviado (simulado).'); }
+
+  // small escape
+  function escapeHtml(s){ return (s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+  // start app
+  start();
+  </script>
+</body>
+  </html>
