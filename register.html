@@ -1,38 +1,28 @@
 <!doctype html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Criar Conta — YLO</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-  <div class="container">
-    <h2>Criar Conta</h2>
-
-    <div class="form-box">
+  <main class="auth-page">
+    <div class="auth-card">
+      <h2>Criar Conta</h2>
       <label>Nome completo</label>
-      <input type="text" id="reg-name" placeholder="Seu nome">
-
-      <label>Email</label>
-      <input type="email" id="reg-email" placeholder="Digite o email">
-
+      <input id="reg-name" placeholder="Seu nome" />
+      <label>Email ou telefone</label>
+      <input id="reg-identifier" placeholder="email@example.com ou +244..." />
       <label>Senha</label>
-      <input type="password" id="reg-password" placeholder="Crie uma senha">
-
-      <button class="btn-primary" id="btn-register">Criar Conta</button>
+      <input id="reg-password" type="password" placeholder="Senha (min 4)" />
+      <label>Avatar (opcional)</label>
+      <input id="reg-avatar" type="file" accept="image/*" />
+      <button id="btn-register" class="btn primary">Criar Conta</button>
+      <p class="muted">Já tens conta? <a href="login.html">Entrar</a></p>
     </div>
-
-    <div class="alt-link">
-      Já tens conta?
-      <a href="login.html">Entrar</a>
-    </div>
-    
-  </div>
+  </main>
 
   <script src="script.js"></script>
-
 </body>
-  </html>
+</html>
