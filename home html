@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>YLO — Início</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script defer src="assets/js/main.js"></script>
+</head>
+
+<body>
+
+  <!-- Barra superior -->
+  <header class="topbar">
+    <div class="logo">YLO ✔</div>
+
+    <nav class="top-nav">
+      <a href="home.html">Início</a>
+      <a href="reels.html">Reels</a>
+      <a href="activity.html">Atividade</a>
+      <a href="monet.html">Monetização</a>
+      <a href="profile.html">Meu Perfil</a>
+    </nav>
+
+    <button onclick="logout()" class="logout-btn">Sair</button>
+  </header>
+
+  <!-- Conteúdo -->
+  <main class="container">
+    <div class="feed-box">
+      <h2>O que se passa?</h2>
+
+      <textarea placeholder="Escreva alguma coisa..."></textarea>
+
+      <button class="btn-primary">Publicar</button>
+    </div>
+
+    <div class="post-card">
+      <h3>Visitante</h3>
+      <p>Bem-vindo à YLO, a rede social moderna!</p>
+    </div>
+  </main>
+
+</body>
+</html>
