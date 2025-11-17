@@ -1,35 +1,25 @@
 <!doctype html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Entrar na YLO</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Entrar — YLO</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-  <div class="container">
-    <h2>Entrar na YLO</h2>
-
-    <div class="form-box">
-      <label>Email</label>
-      <input type="email" id="login-email" placeholder="Digite o email">
-
+  <main class="auth-page">
+    <div class="auth-card">
+      <h2>Entrar na YLO</h2>
+      <label>Email ou número</label>
+      <input id="login-identifier" placeholder="email@example.com ou +244..." />
       <label>Senha</label>
-      <input type="password" id="login-password" placeholder="Digite a senha">
-
-      <button class="btn-primary" id="btn-login">Entrar</button>
+      <input id="login-password" type="password" placeholder="Senha" />
+      <button id="btn-login" class="btn primary">Entrar</button>
+      <p class="muted">Ainda não tens conta? <a href="register.html">Criar Conta</a></p>
+      <p class="muted"><a href="index.html">Voltar</a></p>
     </div>
-
-    <div class="alt-link">
-      Ainda não tens conta?
-      <a href="register.html">Criar Conta</a>
-    </div>
-    
-  </div>
+  </main>
 
   <script src="script.js"></script>
-
 </body>
-  </html>
+</html>
