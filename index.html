@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YLO — Social</title>
+  <link rel="stylesheet" href="./src/style.css">
+  <style>
+    :root{--blue:#1877f2;--bg:#f0f2f5;--card:#fff}
+    body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:#111}
+    .topbar{position:fixed;top:0;left:0;right:0;height:60px;background:var(--card);display:flex;align-items:center;justify-content:space-between;padding:0 14px;box-shadow:0 2px 6px rgba(0,0,0,.06);z-index:50}
+    .brand{font-weight:700;color:var(--blue);font-size:20px}
+    .nav-icons{display:flex;gap:10px;align-items:center}
+    .btn{background:transparent;border:0;padding:8px 10px;border-radius:8px;cursor:pointer}
+    .btn.primary{background:var(--blue);color:#fff}
+    .container{padding-top:74px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:260px 1fr 320px;gap:18px}
+    .card{background:var(--card);padding:12px;border-radius:10px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+    .center{max-width:680px;margin:0 auto}
+    /* mobile */
+    @media (max-width:900px){
+      .container{grid-template-columns:1fr;padding:86px 12px 40px}
+      .right-col{display:none}
+      .left-col{display:none}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="brand">YLO <span style="font-size:12px;color:#2d3748;margin-left:6px">✔</span></div>
+      <input id="quick-search" placeholder="Pesquisar..." style="padding:8px;border-radius:8px;border:1px solid #e6edf3;width:260px" />
+    </div>
+
+    <div class="nav-icons">
+      <button class="btn" data-go="home">Início</button>
+      <button class="btn" data-go="reels">Reels</button>
+      <button class="btn" data-go="activity">Atividade</button>
+      <button class="btn" id="btn-profile" data-go="profile">Meu Perfil</button>
+      <button class="btn primary" data-go="login" id="btn-login">Entrar</button>
+      <button class="btn" data-go="register" id="btn-register">Criar Conta</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <aside class="left-col">
+      <div class="card">
+        <h4>Menu</h4>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn" data-go="home">Início</button>
+          <button class="btn" data-go="reels">Reels</button>
+          <button class="btn" data-go="monet">Monetização</button>
+          <button class="btn" data-go="profile">Meu Perfil</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <h4>Procurar</h4>
+        <input id="aside-search" placeholder="Pesquisar pessoas..." style="width:100%;padding:8px;border-radius:8px;border:1px solid #eef2f6">
+        <div id="aside-results" style="margin-top:8px"></div>
+      </div>
+    </aside>
+
+    <main class="center">
+      <div id="main-card" class="card">
+        <h2>Bem-vindo ao YLO</h2>
+        <p>Conteúdo principal. Usa os botões no topo para navegar — se a página solicitada estiver presente na raiz ela será aberta.</p>
+        <div id="main-content"></div>
+      </div>
+    </main>
+
+    <aside class="right-col">
+      <div class="card">
+        <h4>Suporte</h4>
+        <button class="btn" id="open-support">Abrir Ajuda</button>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <h4>Anúncios</h4>
+        <div>Espaço de anúncio (simulado)</div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+  </html>
