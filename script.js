@@ -107,3 +107,18 @@ screens.reels.innerHTML = `
     <p>Reels será integrado depois (vídeos curtos estilo TikTok).</p>
   </div>
 `;
+/* =============================
+   YLO — Abrir páginas externas
+   =============================*/
+
+function openPerfil() {
+  window.location.href = "perfil.html";
+}
+
+function openTerms() {
+  window.location.href = "terms.html";
+}
+
+function openPrivacy() {
+  window.location.href = "privacy.html";
+   }
