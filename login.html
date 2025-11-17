@@ -21,3 +21,23 @@
 
 </body>
   </html>
+<script>
+document.getElementById("login-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("login-email").value.trim();
+    const senha = document.getElementById("login-password").value.trim();
+
+    const user = JSON.parse(localStorage.getItem("ylo_user"));
+
+    if (!user || user.email !== email || user.senha !== senha) {
+        alert("Email ou senha incorretos!");
+        return;
+    }
+
+    // Login OK
+    localStorage.setItem("ylo_logged", "true");
+    alert("Login feito com sucesso!");
+    window.location.href = "index.html";
+});
+    </script>
