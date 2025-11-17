@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YLO — Social (Local)</title>
+  <meta name="description" content="YLO — Rede social (demo local). Todos os dados ficam no navegador." />
+  <!-- Mantém o CSS existente (ajusta se preferir mover) -->
+  <link rel="stylesheet" href="./src/style.css">
+  <style>
+    /* Pequenos estilos inline para o layout Facebook-like (apenas fallback, principal é ./src/style.css) */
+    :root{
+      --bg:#f0f2f5; --card:#ffffff; --muted:#6b7280; --accent:#1877f2; --radius:10px;
+    }
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    body{background:var(--bg);color:#0f172a}
+    .topbar{height:64px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;box-shadow:0 1px 0 rgba(16,24,40,0.06)}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:var(--accent)}
+    .brand .logo-badge{width:36px;height:36px;border-radius:8px;background:linear-gradient(90deg,#1877f2,#00a2ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+    .top-actions{display:flex;align-items:center;gap:8px}
+    .search-input{width:420px;max-width:40vw;padding:8px 12px;border-radius:20px;border:1px solid #e6eef9;background:#f6f8fb}
+    .btn{background:#fff;border:1px solid #e6eef9;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .btn.primary{background:var(--accent);color:#fff;border:0}
+    .layout{display:grid;grid-template-columns:260px 1fr 320px;gap:16px;max-width:1200px;margin:20px auto;padding:0 12px}
+    .card{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 6px 16px rgba(15,23,42,0.04)}
+    .left-col .profile-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+    .avatar{width:72px;height:72px;border-radius:50%;background:#e6eef9;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .menu-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+    .menu-list button{width:100%;text-align:left;padding:8px;border-radius:8px;border:0;background:transparent;cursor:pointer}
+    .composer textarea{width:100%;min-height:60px;border-radius:8px;border:1px solid #eef2ff;padding:10px;resize:vertical}
+    .composer-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+    .feed{display:flex;flex-direction:column;gap:12px}
+    .post{padding:12px;border-radius:12px;background:var(--card);box-shadow:0 2px 6px rgba(2,6,23,0.03)}
+    .right-col .reels{display:flex;flex-direction:column;gap:8px}
+    .chat-panel{position:fixed;right:20px;bottom:20px;width:360px;max-width:92vw;z-index:60}
+    .hidden{display:none !important}
+    footer.footer{max-width:1200px;margin:20px auto;padding:12px;text-align:center;color:var(--muted)}
+    /* ícones pequenos */
+    .icon{width:20px;height:20px;display:inline-block;vertical-align:middle}
+    @media (max-width:980px){
+      .layout{grid-template-columns:1fr;gap:12px;padding:12px}
+      .search-input{display:none}
+      .left-col,.right-col{display:none}
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar" role="banner">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="brand" aria-label="YLO">
+        <div class="logo-badge">Y</div>
+        <div>YLO</div>
+      </div>
+      <input id="global-search" class="search-input" placeholder="Pesquisar pessoas ou posts..." aria-label="Pesquisar" />
+    </div>
+
+    <div class="top-actions" role="navigation" aria-label="Ações">
+      <!-- Home / Reels / Marketplace / Notifications / Chat icons (preserve ids) -->
+      <button id="nav-home" title="Início" class="btn" aria-label="Início">
+        <!-- home svg -->
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#111827"><path d="M3 10.5L12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10.5z" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button id="nav-reels" title="Reels" class="btn" aria-label="Reels">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#111827"><path d="M2 7h20M2 12h20M2 17h20" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </button>
+
+      <button id="nav-market" title="Marketplace" class="btn" aria-label="Marketplace">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#111827"><path d="M3 7h18v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7zM16 3h-8v4h8V3z" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button id="btn-notifications" title="Notificações" class="btn" aria-label="Notificações">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#111827"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button id="btn-open-chat" title="Mensagens" class="btn" aria-label="Mensagens">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#111827"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button id="btn-open-settings" title="Configurações" class="btn" aria-label="Configurações">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#111827"><path d="M12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7zM19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82L4.32 4.9a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H12a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09c.3.09.59.24.83.44" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button id="nav-login" class="btn primary" title="Entrar / Registrar">Entrar / Registrar</button>
+      <button id="nav-logout" class="btn danger hidden" title="Sair">Sair</button>
+    </div>
+  </header>
+
+  <!-- Conteúdo -->
+  <main class="layout" role="main">
+    <!-- Sidebar esquerda -->
+    <aside class="left-col">
+      <div class="card profile-card" id="session-card" aria-label="Perfil">
+        <div id="session-avatar" class="avatar">U</div>
+        <div id="session-name" style="font-weight:700">Visitante</div>
+        <div id="session-bio" class="muted" style="color:var(--muted)">Faça login para interagir</div>
+        <div style="margin-top:8px;width:100%">
+          <button id="btn-edit-profile" class="btn small hidden">Editar perfil</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>Menu</h4>
+        <ul class="menu-list" aria-label="Menu principal">
+          <li><button id="side-home" class="linkish">Início</button></li>
+          <li><button id="side-reels" class="linkish">Reels</button></li>
+          <li><button id="side-market" class="linkish">Marketplace</button></li>
+          <li><button id="side-monet" class="linkish">Monetização</button></li>
+          <li><button id="side-help" class="linkish">Ajuda</button></li>
+        </ul>
+      </div>
+
+      <div class="card small-card" style="margin-top:12px">
+        <h4>Buscar</h4>
+        <input id="aside-search" placeholder="Pesquisar usuários..." />
+        <div id="search-results"></div>
+      </div>
+    </aside>
+
+    <!-- Coluna central: composer + feed -->
+    <section class="center-col">
+      <div class="card composer" id="composer">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div id="compose-avatar" class="avatar" style="width:48px;height:48px">U</div>
+          <div style="flex:1">
+            <textarea id="post-content" placeholder="O que está rolando?" style="width:100%;border-radius:8px;padding:8px"></textarea>
+            <div class="composer-row">
+              <input id="post-image" type="file" accept="image/*,video/*" />
+              <div style="display:flex;gap:8px">
+                <button id="btn-post" class="btn primary">Publicar</button>
+                <button id="btn-attach" class="btn">Anexar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="feed" class="feed" aria-live="polite">
+        <!-- Posts serão injetados pelo app.js -->
+      </div>
+    </section>
+
+    <!-- Sidebar direita -->
+    <aside class="right-col">
+      <div class="card reels-card">
+        <h4>Reels</h4>
+        <div id="reels" class="reels"></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button id="reel-prev" class="btn small">◀</button>
+          <button id="reel-next" class="btn small">▶</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>Atividade</h4>
+        <div id="activity" style="font-size:13px;color:var(--muted)">Sem notificações</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>Vendas</h4>
+        <div id="marketplace" style="font-size:13px;color:var(--muted)">Sem produtos</div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Chat painel (mantém ids) -->
+  <div id="chat-panel" class="chat-panel hidden card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-weight:700">Mensagens</div>
+      <button id="chat-close" class="btn small">Fechar</button>
+    </div>
+    <div id="conv-list" style="max-height:360px;overflow:auto"></div>
+
+    <div id="conv-window" class="hidden" style="margin-top:8px">
+      <div id="conv-head" style="font-weight:700"></div>
+      <div id="conv-messages" style="max-height:220px;overflow:auto;margin:8px 0"></div>
+      <div style="display:flex;gap:8px">
+        <input id="conv-input" placeholder="Escreve..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #eef2ff" />
+        <button id="conv-send" class="btn primary">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card card" style="max-width:640px;margin:40px auto;padding:18px">
+      <button id="modal-close" class="modal-close" style="float:right">✕</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <small>YLO — Demo local • Todos os dados ficam no seu navegador</small>
+  </footer>
+
+  <!-- Mantém o script existente (app.js) -->
+  <script src="./src/app.js"></script>
+</body>
+  </html>
