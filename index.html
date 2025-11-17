@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YLO — Social (Híbrido)</title>
+  <meta name="description" content="YLO — Rede social demo (localStorage). Feed, Reels, Chat, Monetização."/>
+  <link rel="stylesheet" href="./src/style.css">
+  <style>
+    /* Minimal inline fallback styles to garantir funcionalidade imediata */
+    :root{ --bg:#f6f7fb; --card:#fff; --muted:#6b7280; --accent:#0ea5a1; --primary:#2563eb; --danger:#ef4444; }
+    *{box-sizing:border-box}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:var(--bg); color:#0f172a;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:linear-gradient(90deg,#0d47a1 0%, #1e90ff 100%);color:#fff;position:sticky;top:0;z-index:60}
+    .brand{font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+    .nav-right{display:flex;align-items:center;gap:8px}
+    input,textarea,button{font-family:inherit}
+    input[type="text"], input[type="search"], input[type="email"], textarea{padding:8px;border-radius:8px;border:1px solid #e6eefc}
+    .btn{padding:8px 10px;border-radius:8px;border:none;background:#e6eefc;cursor:pointer}
+    .btn.primary{background:var(--primary);color:#fff}
+    .btn.small{padding:6px 8px;font-size:13px}
+    .btn.danger{background:var(--danger);color:#fff}
+    .layout{display:grid;grid-template-columns:260px 1fr 320px;gap:18px;padding:18px;max-width:1200px;margin:18px auto}
+    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 1px 4px rgba(2,6,23,0.04)}
+    .left-col,.right-col{height:calc(100vh - 120px);overflow:auto;padding-bottom:40px}
+    .center-col{min-height:80vh}
+    .profile-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+    .avatar{width:84px;height:84px;border-radius:50%;background:#e6eefc;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .muted{color:var(--muted)}
+    .menu-list{list-style:none;padding:0;margin:6px 0;display:flex;flex-direction:column;gap:8px}
+    .linkish{background:none;border:none;color:#111;text-align:left;padding:6px;border-radius:8px;cursor:pointer}
+    .composer{display:flex;flex-direction:column;gap:8px}
+    textarea#post-content{min-height:80px;border:1px solid #e6eefc;padding:10px;border-radius:10px}
+    .feed{display:flex;flex-direction:column;gap:12px}
+    .post.card{padding:12px}
+    .post .avatar img{border-radius:50%}
+    .reels{display:flex;align-items:center;justify-content:center;min-height:140px;overflow:hidden}
+    .reels img, .reels video{max-width:100%;border-radius:8px}
+    .chat-panel{position:fixed;right:12px;top:80px;width:360px;height:70vh;background:var(--card);box-shadow:0 8px 24px rgba(2,6,23,0.12);border-radius:12px;display:flex;flex-direction:column;z-index:80}
+    .chat-panel.hidden{display:none}
+    .chat-top{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eef2ff}
+    .conv-list{overflow:auto;padding:12px;flex:1}
+    .conv-window{border-top:1px solid #eef2ff;padding:12px;display:flex;flex-direction:column;gap:8px}
+    .conv-messages{max-height:240px;overflow:auto}
+    .modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(2,6,23,0.45);display:flex;align-items:center;justify-content:center;z-index:90}
+    .modal.hidden{display:none}
+    .modal-card{width:100%;max-width:560px;border-radius:12px;background:var(--card);padding:18px;position:relative}
+    .modal-close{position:absolute;right:12px;top:12px;border:none;background:none;font-size:18px;cursor:pointer}
+    footer.footer{text-align:center;padding:10px;color:var(--muted)}
+    .badge-small{display:inline-block;padding:3px 6px;border-radius:999px;background:#e6eefc;color:#0369a1;font-weight:700;font-size:12px}
+    .search-result{padding:8px;border-bottom:1px solid #f1f5f9}
+    /* responsive */
+    @media (max-width:980px){
+      .layout{grid-template-columns:1fr; padding:12px}
+      .left-col,.right-col{display:none}
+      .chat-panel{right:8px;top:70px;width:95%;height:60vh}
+    }
+  </style>
+</head>
+<body>
+  <header class="nav" role="banner">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 2L15 8H9L12 2Z" fill="#fff"/></svg>
+      <span>YLO</span>
+      <span id="global-verified" class="badge-small" style="margin-left:8px"></span>
+    </div>
+
+    <div class="nav-right">
+      <input id="global-search" type="search" placeholder="Pesquisar pessoas ou posts..." style="min-width:220px" />
+      <button id="btn-open-support" class="btn small">Ajuda</button>
+      <button id="btn-open-settings" class="btn small">Config</button>
+      <button id="btn-open-chat" class="btn small">Chat</button>
+      <button id="nav-login" class="btn primary">Entrar / Registrar</button>
+      <button id="nav-logout" class="btn danger hidden">Sair</button>
+    </div>
+  </header>
+
+  <main class="layout" role="main">
+    <!-- left column -->
+    <aside class="left-col">
+      <div class="card profile-card" id="session-card">
+        <div id="session-avatar" class="avatar">U</div>
+        <div id="session-name">Visitante</div>
+        <div id="session-bio" class="muted">Faça login para interagir</div>
+        <div style="display:flex;gap:6px;margin-top:10px">
+          <button id="btn-edit-profile" class="btn small hidden">Editar</button>
+          <button id="nav-profile" class="btn small">Meu Perfil</button>
+        </div>
+      </div>
+
+      <div class="card menu-card" style="margin-top:12px">
+        <h4>Menu</h4>
+        <ul class="menu-list">
+          <li><button id="nav-home" class="linkish">🏠 Início</button></li>
+          <li><button id="nav-friends" class="linkish">👥 Amigos</button></li>
+          <li><button id="nav-reels" class="linkish">🎬 Reels</button></li>
+          <li><button id="nav-activity" class="linkish">🔔 Atividade</button></li>
+          <li><button id="nav-monet" class="linkish">💸 Monetização</button></li>
+        </ul>
+      </div>
+
+      <div class="card small-card" style="margin-top:12px">
+        <h4>Buscar</h4>
+        <input id="aside-search" placeholder="Pesquisar usuários..." />
+        <div id="search-results" style="margin-top:8px"></div>
+      </div>
+    </aside>
+
+    <!-- center column -->
+    <section class="center-col">
+      <div class="card composer hidden" id="composer">
+        <textarea id="post-content" placeholder="O que estás a pensar?"></textarea>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input id="post-image" type="file" accept="image/*,video/*" />
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <button id="btn-post" class="btn primary">Publicar</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="feed" class="feed" aria-live="polite" style="margin-top:12px"></div>
+    </section>
+
+    <!-- right column -->
+    <aside class="right-col">
+      <div class="card reels-card">
+        <h4>Reels</h4>
+        <div id="reels" class="reels"></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px">
+          <div>
+            <button id="reel-prev" class="btn small">◀</button>
+            <button id="reel-next" class="btn small">▶</button>
+          </div>
+          <div class="muted">Swipe para ver mais</div>
+        </div>
+      </div>
+
+      <div class="card support-card" style="margin-top:12px">
+        <h4>Suporte</h4>
+        <button id="btn-open-support-2" class="btn small">Abrir Ajuda</button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Chat Panel (hidden by default) -->
+  <div id="chat-panel" class="chat-panel hidden" aria-hidden="true">
+    <div class="chat-top">
+      <div>Mensagens</div>
+      <div>
+        <button id="chat-close" class="btn small">Fechar</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:row;gap:12px;flex:1;min-height:0">
+      <div style="width:140px;border-right:1px solid #eef2ff;overflow:auto">
+        <div id="conv-list" style="padding:12px"></div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column">
+        <div id="conv-window" class="conv-window hidden" style="flex:1;display:flex;flex-direction:column">
+          <div id="conv-head" style="font-weight:700;padding-bottom:6px"></div>
+          <div id="conv-messages" class="conv-messages" style="flex:1;overflow:auto;padding:6px"></div>
+          <div style="display:flex;gap:8px;padding-top:8px">
+            <input id="conv-input" placeholder="Escreve..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #eef2ff"/>
+            <button id="conv-send" class="btn small">Enviar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card">
+      <button id="modal-close" class="modal-close">✕</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <small>YLO — Demo local • Todos os dados ficam no teu navegador</small>
+  </footer>
+
+  <!-- App JS -->
+  <script src="./src/app.js" type="module"></script>
+</body>
+</html>
